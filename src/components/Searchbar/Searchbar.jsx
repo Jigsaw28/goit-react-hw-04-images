@@ -1,43 +1,39 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import Notiflix from 'notiflix';
 
-export class Searchbar extends Component {
-  state = {
-    value: '',
+export const Searchbar = ({ onSubmit }) => {
+  const [value, setValue] = useState('');
+
+  const handleChange = ({ target: { value } }) => {
+    setValue(value);
   };
 
-  handleChange = ({ target: { value } }) => {
-    this.setState({ value });
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (!this.state.value) {
-      return Notiflix.Notify.info('Enter something')
+    if (!value) {
+      return Notiflix.Notify.info('Enter something');
     }
-    this.props.onSubmit(this.state.value)
-    this.setState({value: ''})
+    onSubmit(value);
+    setValue('');
   };
 
-  render() {
-    return (
-      <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.handleSubmit}>
-          <button type="submit" className="SearchForm-button">
-            <span className="SearchForm-button-label">Search</span>
-          </button>
+  return (
+    <header className="Searchbar">
+      <form className="SearchForm" onSubmit={handleSubmit}>
+        <button type="submit" className="SearchForm-button">
+          <span className="SearchForm-button-label">Search</span>
+        </button>
 
-          <input
-            className="SearchForm-input"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.handleChange}
-            value={this.state.value}
-          />
-        </form>
-      </header>
-    );
-  }
-}
+        <input
+          className="SearchForm-input"
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          onChange={handleChange}
+          value={value}
+        />
+      </form>
+    </header>
+  );
+};
